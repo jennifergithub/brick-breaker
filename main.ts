@@ -7,11 +7,36 @@ namespace SpriteKind {
     export const addBallpwr = SpriteKind.create()
     export const increaseturtlepwrkind = SpriteKind.create()
 }
+namespace myTiles {
+    //% blockIdentity=images._tile
+    export const tile0 = img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`
+}
 sprites.onOverlap(SpriteKind.ball, SpriteKind.brick, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 200)
     sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
     info.changeScoreBy(10)
     numBricks += -1
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.addBallpwr, function (sprite, otherSprite) {
+    info.changeLifeBy(1)
+    otherSprite.destroy()
 })
 function increaseTurtle () {
     effects.bubbles.startScreenEffect(1000)
@@ -449,26 +474,16 @@ sprites.onOverlap(SpriteKind.ball, SpriteKind.addBallpwr, function (sprite, othe
     info.changeScoreBy(10)
     numBricks += -1
     addBallvar = sprites.createProjectileFromSprite(img`
-. 2 2 . 
-2 2 2 2 
-2 2 2 2 
-. 2 2 . 
-`, otherSprite, 0, 40)
-    addBallvar.setKind(SpriteKind.ball)
-    addBallvar1 = sprites.createProjectileFromSprite(img`
-. 2 2 . 
-2 2 2 2 
-2 2 2 2 
-. 2 2 . 
-`, otherSprite, 0, 40)
-    addBallvar1.setKind(SpriteKind.ball)
-    addballvar2 = sprites.createProjectileFromSprite(img`
-. 2 2 . 
-2 2 2 2 
-2 2 2 2 
-. 2 2 . 
-`, otherSprite, 0, 40)
-    addballvar2.setKind(SpriteKind.ball)
+. 2 2 . . 2 2 . 
+2 2 2 . . 2 2 2 
+2 2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 2 
+. 2 2 2 2 2 2 . 
+. . 2 2 2 2 . . 
+. . . 2 2 . . . 
+`, otherSprite, 0, 50)
+    addBallvar.setKind(SpriteKind.addBallpwr)
 })
 info.onCountdownEnd(function () {
     paddle.setImage(img`
@@ -499,30 +514,19 @@ function buildSetBricks () {
     }
 }
 function createBrick (x: number, y: number) {
-    randnum = Math.randomRange(0, 19)
-    if (randnum == 1) {
+    randnum = Math.randomRange(0, 21)
+    if (randnum == 0) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f 2 1 1 2 2 2 1 1 2 2 2 1 1 2 f 
-f 1 1 1 1 2 1 1 1 1 2 1 1 1 1 f 
-f 1 1 1 1 2 1 1 1 1 2 1 1 1 1 f 
-f 2 1 1 2 2 2 1 1 2 2 2 1 1 2 f 
+f 2 2 2 2 2 1 2 1 2 2 2 2 2 2 f 
+f 2 2 2 2 1 1 1 1 1 2 2 2 2 2 f 
+f 2 2 2 2 1 1 1 1 1 2 2 2 2 2 f 
+f 2 2 2 2 2 1 1 1 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 1 2 2 2 2 2 2 2 f 
 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
 f f f f f f f f f f f f f f f f 
 `, SpriteKind.addBallpwr)
-    } else if (randnum < 3) {
-        brickVar = sprites.create(img`
-f f f f f f f f f f f f f f f f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f f f f f f f f f f f f f f f f 
-`, SpriteKind.brick)
-    } else if (randnum == 3) {
+    } else if (randnum <= 2) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
 f 4 4 5 4 4 4 4 4 4 4 4 4 5 4 f 
@@ -533,29 +537,40 @@ f 4 5 4 4 4 4 4 4 4 4 4 4 4 5 f
 f 4 4 5 4 4 4 4 4 4 4 4 4 5 4 f 
 f f f f f f f f f f f f f f f f 
 `, SpriteKind.increaseTurtlepwr)
-    } else if (randnum <= 5) {
+    } else if (randnum < 5) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f f f f f f f f f f f f f f f f 
-`, SpriteKind.brick)
-    } else if (randnum <= 7) {
-        brickVar = sprites.create(img`
-f f f f f f f f f f f f f f f f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
 f f f f f f f f f f f f f f f f 
 `, SpriteKind.brick)
     } else if (randnum <= 9) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.brick)
+    } else if (randnum <= 13) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.brick)
+    } else if (randnum <= 17) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
 f 7 7 7 7 7 7 7 7 7 7 7 7 7 7 f 
@@ -589,8 +604,6 @@ sprites.onOverlap(SpriteKind.increaseturtlepwrkind, SpriteKind.Player, function 
 })
 let brickVar: Sprite = null
 let randnum = 0
-let addballvar2: Sprite = null
-let addBallvar1: Sprite = null
 let addBallvar: Sprite = null
 let col = 0
 let ballvar: Sprite = null
@@ -723,7 +736,7 @@ d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d 
 d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d 
 d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d 
 `)
-game.showLongText("Break as many tiles as possible! Keep the ball alive! Press B to launch.", DialogLayout.Bottom)
+game.showLongText("Break as many bricks as possible! Keep the ball alive! Press B to launch.", DialogLayout.Bottom)
 if (controller.A.isPressed()) {
     startGame()
 }
