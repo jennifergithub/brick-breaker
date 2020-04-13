@@ -3,12 +3,44 @@ namespace SpriteKind {
     export const ball = SpriteKind.create()
     export const top = SpriteKind.create()
     export const brick = SpriteKind.create()
+    export const increaseTurtlepwr = SpriteKind.create()
+    export const addBallpwr = SpriteKind.create()
+    export const increaseturtlepwrkind = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.ball, SpriteKind.brick, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 200)
     sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
     info.changeScoreBy(10)
     numBricks += -1
+})
+function increaseTurtle () {
+    effects.bubbles.startScreenEffect(1000)
+    info.startCountdown(10)
+    paddle.setImage(img`
+7 7 7 7 7 7 e e f e e f f f e e e f e e f f f e 7 7 
+7 f 1 7 7 7 e e f e e f e e f e f f f f e f f f f 7 
+7 1 1 7 7 7 f f f f f f e f f f f e e f f f e e f 7 
+7 7 7 7 7 7 e e e 7 7 e f e e e f f f f 7 7 f f . . 
+. . . . . . . . . 7 7 e f f f f f e e . 7 7 . . . . 
+. . . . . . . . 7 7 7 . . . . . . . . 7 7 7 . . . . 
+`)
+}
+sprites.onOverlap(SpriteKind.ball, SpriteKind.increaseTurtlepwr, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 200)
+    sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
+    info.changeScoreBy(10)
+    numBricks += -1
+    increaseTurtlepwrvar = sprites.createProjectileFromSprite(img`
+. . . . . . . . 
+. . 5 . . 5 . . 
+. 5 . . . . 5 . 
+5 5 5 5 5 5 5 5 
+5 5 5 5 5 5 5 5 
+. 5 . . . . 5 . 
+. . 5 . . 5 . . 
+. . . . . . . . 
+`, otherSprite, 0, 40)
+    increaseTurtlepwrvar.setKind(SpriteKind.increaseturtlepwrkind)
 })
 function startGame () {
     numBricks = 0
@@ -411,6 +443,43 @@ d d d d d d d d d d d d d 7 7 7 7 7 d d d d d d d d d d . . d d d d d d d d d d 
 sprites.onOverlap(SpriteKind.ball, SpriteKind.edge, function (sprite, otherSprite) {
     sprite.setVelocity(-1 * sprite.vx, sprite.vy)
 })
+sprites.onOverlap(SpriteKind.ball, SpriteKind.addBallpwr, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 200)
+    sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
+    info.changeScoreBy(10)
+    numBricks += -1
+    addBallvar = sprites.createProjectileFromSprite(img`
+. 2 2 . 
+2 2 2 2 
+2 2 2 2 
+. 2 2 . 
+`, otherSprite, 0, 40)
+    addBallvar.setKind(SpriteKind.ball)
+    addBallvar1 = sprites.createProjectileFromSprite(img`
+. 2 2 . 
+2 2 2 2 
+2 2 2 2 
+. 2 2 . 
+`, otherSprite, 0, 40)
+    addBallvar1.setKind(SpriteKind.ball)
+    addballvar2 = sprites.createProjectileFromSprite(img`
+. 2 2 . 
+2 2 2 2 
+2 2 2 2 
+. 2 2 . 
+`, otherSprite, 0, 40)
+    addballvar2.setKind(SpriteKind.ball)
+})
+info.onCountdownEnd(function () {
+    paddle.setImage(img`
+7 7 7 e e f e e f e e f f f 7 7 
+7 f 1 e e f e e f e e f e e f 7 
+7 1 1 f f f f f f f f f e f f 7 
+7 7 7 e 7 7 e e f e e 7 7 e e 7 
+. . . . 7 7 f f f f f 7 7 . . . 
+. . . 7 7 7 . . . . 7 7 7 . . . 
+`)
+})
 sprites.onOverlap(SpriteKind.ball, SpriteKind.Player, function (sprite, otherSprite) {
     sprite.setVelocity((sprite.x - otherSprite.x) * 5, -1 * sprite.vy)
     if (sprite.vy > -150) {
@@ -430,8 +499,19 @@ function buildSetBricks () {
     }
 }
 function createBrick (x: number, y: number) {
-    randnum = Math.randomRange(0, 4)
-    if (randnum == 0) {
+    randnum = Math.randomRange(0, 19)
+    if (randnum == 1) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 1 1 2 2 2 1 1 2 2 2 1 1 2 f 
+f 1 1 1 1 2 1 1 1 1 2 1 1 1 1 f 
+f 1 1 1 1 2 1 1 1 1 2 1 1 1 1 f 
+f 2 1 1 2 2 2 1 1 2 2 2 1 1 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.addBallpwr)
+    } else if (randnum < 3) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
@@ -440,31 +520,42 @@ f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f
 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
-f f f f f f f f f f f f f f f f 
-`, SpriteKind.brick)
-    } else if (randnum == 1) {
-        brickVar = sprites.create(img`
-f f f f f f f f f f f f f f f f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
-f f f f f f f f f f f f f f f f 
-`, SpriteKind.brick)
-    } else if (randnum == 2) {
-        brickVar = sprites.create(img`
-f f f f f f f f f f f f f f f f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
-f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
 f f f f f f f f f f f f f f f f 
 `, SpriteKind.brick)
     } else if (randnum == 3) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 4 4 5 4 4 4 4 4 4 4 4 4 5 4 f 
+f 4 5 4 4 4 4 4 4 4 4 4 4 4 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 4 5 4 4 4 4 4 4 4 4 4 4 4 5 f 
+f 4 4 5 4 4 4 4 4 4 4 4 4 5 4 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.increaseTurtlepwr)
+    } else if (randnum <= 5) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f 4 4 4 4 4 4 4 4 4 4 4 4 4 4 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.brick)
+    } else if (randnum <= 7) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.brick)
+    } else if (randnum <= 9) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
 f 7 7 7 7 7 7 7 7 7 7 7 7 7 7 f 
@@ -493,15 +584,22 @@ f f f f f f f f f f f f f f f f
 sprites.onOverlap(SpriteKind.ball, SpriteKind.top, function (sprite, otherSprite) {
     sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
 })
+sprites.onOverlap(SpriteKind.increaseturtlepwrkind, SpriteKind.Player, function (sprite, otherSprite) {
+    increaseTurtle()
+})
 let brickVar: Sprite = null
 let randnum = 0
+let addballvar2: Sprite = null
+let addBallvar1: Sprite = null
+let addBallvar: Sprite = null
 let col = 0
 let ballvar: Sprite = null
 let right: Sprite = null
 let left: Sprite = null
 let top2: Sprite = null
-let paddle: Sprite = null
 let startBallVar = 0
+let increaseTurtlepwrvar: Sprite = null
+let paddle: Sprite = null
 let numBricks = 0
 scene.setBackgroundImage(img`
 d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d . . d d d d d d d . . 
