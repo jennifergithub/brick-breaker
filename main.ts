@@ -6,6 +6,7 @@ namespace SpriteKind {
     export const increaseTurtlepwr = SpriteKind.create()
     export const addBallpwr = SpriteKind.create()
     export const increaseturtlepwrkind = SpriteKind.create()
+    export const addLifekind = SpriteKind.create()
 }
 namespace myTiles {
     //% blockIdentity=images._tile
@@ -34,7 +35,7 @@ sprites.onOverlap(SpriteKind.ball, SpriteKind.brick, function (sprite, otherSpri
     info.changeScoreBy(10)
     numBricks += -1
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.addBallpwr, function (sprite, otherSprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.addLifekind, function (sprite, otherSprite) {
     info.changeLifeBy(1)
     otherSprite.destroy()
 })
@@ -468,12 +469,12 @@ d d d d d d d d d d d d d 7 7 7 7 7 d d d d d d d d d d . . d d d d d d d d d d 
 sprites.onOverlap(SpriteKind.ball, SpriteKind.edge, function (sprite, otherSprite) {
     sprite.setVelocity(-1 * sprite.vx, sprite.vy)
 })
-sprites.onOverlap(SpriteKind.ball, SpriteKind.addBallpwr, function (sprite, otherSprite) {
+sprites.onOverlap(SpriteKind.ball, SpriteKind.addLifekind, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 200)
     sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
     info.changeScoreBy(10)
     numBricks += -1
-    addBallvar = sprites.createProjectileFromSprite(img`
+    addLifevar = sprites.createProjectileFromSprite(img`
 . 2 2 . . 2 2 . 
 2 2 2 . . 2 2 2 
 2 2 2 2 2 2 2 2 
@@ -483,7 +484,7 @@ sprites.onOverlap(SpriteKind.ball, SpriteKind.addBallpwr, function (sprite, othe
 . . 2 2 2 2 . . 
 . . . 2 2 . . . 
 `, otherSprite, 0, 50)
-    addBallvar.setKind(SpriteKind.addBallpwr)
+    addLifevar.setKind(SpriteKind.addLifekind)
 })
 info.onCountdownEnd(function () {
     paddle.setImage(img`
@@ -525,7 +526,7 @@ f 2 2 2 2 2 1 1 1 2 2 2 2 2 2 f
 f 2 2 2 2 2 2 1 2 2 2 2 2 2 2 f 
 f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
 f f f f f f f f f f f f f f f f 
-`, SpriteKind.addBallpwr)
+`, SpriteKind.addLifekind)
     } else if (randnum <= 2) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
@@ -604,7 +605,7 @@ sprites.onOverlap(SpriteKind.increaseturtlepwrkind, SpriteKind.Player, function 
 })
 let brickVar: Sprite = null
 let randnum = 0
-let addBallvar: Sprite = null
+let addLifevar: Sprite = null
 let col = 0
 let ballvar: Sprite = null
 let right: Sprite = null
