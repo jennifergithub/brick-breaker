@@ -486,6 +486,33 @@ sprites.onOverlap(SpriteKind.ball, SpriteKind.addLifekind, function (sprite, oth
 `, otherSprite, 0, 50)
     addLifevar.setKind(SpriteKind.addLifekind)
 })
+sprites.onOverlap(SpriteKind.ball, SpriteKind.addBallpwr, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.fire, 200)
+    sprite.setVelocity(-1 * sprite.vx, -1 * sprite.vy)
+    info.changeScoreBy(10)
+    numBricks += -1
+    addBallvar = sprites.createProjectileFromSprite(img`
+. a a . 
+a a a a 
+a a a a 
+. a a . 
+`, otherSprite, 0, 40)
+    addBallvar.setKind(SpriteKind.ball)
+    addBallvar1 = sprites.createProjectileFromSprite(img`
+. a a . 
+a a a a 
+a a a a 
+. a a . 
+`, otherSprite, 0, 40)
+    addBallvar1.setKind(SpriteKind.ball)
+    addballvar2 = sprites.createProjectileFromSprite(img`
+. a a . 
+a a a a 
+a a a a 
+. a a . 
+`, otherSprite, 0, 40)
+    addballvar2.setKind(SpriteKind.ball)
+})
 info.onCountdownEnd(function () {
     paddle.setImage(img`
 7 7 7 e e f e e f e e f f f 7 7 
@@ -571,7 +598,7 @@ f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f
 f 5 5 5 5 5 5 5 5 5 5 5 5 5 5 f 
 f f f f f f f f f f f f f f f f 
 `, SpriteKind.brick)
-    } else if (randnum <= 17) {
+    } else if (randnum < 17) {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
 f 7 7 7 7 7 7 7 7 7 7 7 7 7 7 f 
@@ -582,6 +609,17 @@ f 7 7 7 7 7 7 7 7 7 7 7 7 7 7 f
 f 7 7 7 7 7 7 7 7 7 7 7 7 7 7 f 
 f f f f f f f f f f f f f f f f 
 `, SpriteKind.brick)
+    } else if (randnum == 17) {
+        brickVar = sprites.create(img`
+f f f f f f f f f f f f f f f f 
+f 3 a a 3 3 3 a a 3 3 3 a a 3 f 
+f 3 a a 3 3 3 a a 3 3 3 a a 3 f 
+f a a a a 3 a a a a 3 a a a a f 
+f a a a a 3 a a a a 3 a a a a f 
+f 3 a a 3 3 3 a a 3 3 3 a a 3 f 
+f 3 a a 3 3 3 a a 3 3 3 a a 3 f 
+f f f f f f f f f f f f f f f f 
+`, SpriteKind.addBallpwr)
     } else {
         brickVar = sprites.create(img`
 f f f f f f f f f f f f f f f f 
@@ -605,6 +643,9 @@ sprites.onOverlap(SpriteKind.increaseturtlepwrkind, SpriteKind.Player, function 
 })
 let brickVar: Sprite = null
 let randnum = 0
+let addballvar2: Sprite = null
+let addBallvar1: Sprite = null
+let addBallvar: Sprite = null
 let addLifevar: Sprite = null
 let col = 0
 let ballvar: Sprite = null
